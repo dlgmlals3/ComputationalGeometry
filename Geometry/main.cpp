@@ -2,7 +2,8 @@
 
 using namespace std;
 
-int main(void) {
-	printf("asdfsfd\n");
+int main(void) 
+{
+	printf("asdf");
 	return 0;
 }
