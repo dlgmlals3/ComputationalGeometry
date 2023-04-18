@@ -1,7 +1,7 @@
 #include "Vector.h"
 using namespace jmk;
 
-float corssProduct2d(Vector2f v1, Vector2f v2)
+float crossProduct2d(Vector2f v1, Vector2f v2)
 {
 	return v1[X] * v2[Y] - v1[Y] * v2[X];
 }
