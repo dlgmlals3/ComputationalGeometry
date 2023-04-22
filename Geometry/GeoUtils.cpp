@@ -1,5 +1,6 @@
 #include "GeoUtils.h"
 
+// AB, AC 변을 갖는 사각형의 넓이
 double jmk::areaTriangle2d(const Point2d& a, const Point2d& b, const Point2d& c) 
 {
 	auto AB = b - a;
@@ -8,6 +9,7 @@ double jmk::areaTriangle2d(const Point2d& a, const Point2d& b, const Point2d& c)
 	return result / 2;
 }
 
+//AB벡터를 기준으로 C의 방향
 int jmk::orientation2d(const Point2d& a, const Point2d& b, const Point2d& c) 
 {
 	auto area = areaTriangle2d(a, b, c);
@@ -29,7 +31,7 @@ int jmk::orientation2d(const Point2d& a, const Point2d& b, const Point2d& c)
 	if ((ab[X] * ac[X] < 0) || (ab[Y] * ac[Y] < 0))
 		return BEHIND;
 	if (ab.magnitude() < ac.magnitude())
-		return BEYOND;
+		return BEYOND; 
 	if (a == c)
 		return ORIGIN;
 	if (b == c)
