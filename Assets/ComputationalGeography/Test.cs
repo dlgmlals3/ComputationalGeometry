@@ -17,6 +17,7 @@ public class Test : MonoBehaviour
         Debug.Log("k - u" + (k - u));
         Debug.Log("k < u" + (k < u));
         Debug.Log("k < u" + (k == u));
+        Debug.Log("k = " + k.Normalize());
     }
 
    

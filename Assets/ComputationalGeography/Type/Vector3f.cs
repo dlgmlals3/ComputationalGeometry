@@ -22,22 +22,98 @@ namespace Computation.geograpy
         public const float FLT_MIN = -1;
 	}
 
-    /// <summary>
-    /// Generic class for arithmetic operator overloading demonstration
-    /// </summary>
-    /// <typeparam name="T"></typeparam>
-    class Vector3f
+   
+    public class Vector
     {
-        private float[] values;
+        protected float[] values;
 
-        public Vector3f(float x, float y, float z)
+		public float this[int key]
+		{
+            get => values[key];
+            set => values[key] = value;
+		}
+
+		public static bool operator ==(Vector a, Vector b)
+		{
+            if (a.values.Length != b.values.Length) return false;            
+            for (int i=0; i < a.values.Length; i++)
+			{
+                if (!a.values[i].IsEqual(b.values[i]))
+				{
+                    return false;
+				}
+			}
+            return true;
+		}
+
+        public static bool operator !=(Vector a, Vector b)
         {
-            this.values = new float[3];
-            this.values[0] = x;
-            this.values[1] = y;
-            this.values[2] = z;
+            return !(a == b);
         }
 
+        
+		public static bool operator <(Vector a, Vector b)
+		{
+			for (int i = 0; i < a.values.Length; i++)
+			{
+				if (a.values[i] < b.values[i]) return true;
+				else if (a.values[i] > b.values[i]) return false;
+			}
+			return false;
+		}
+
+		public static bool operator > (Vector a, Vector b)
+		{
+            if (a == b) return false;
+            return !(a < b);
+		}
+
+        public static float DotProduct(Vector v1, Vector v2)
+		{
+            if (v1.values.Length != v2.values.Length)
+			{
+                return Constants.FLT_MIN;
+			}
+            float product = 0f;
+            for (int i = 0; i < v1.values.Length; i++)
+			{
+                product += v1[i] * v2[i];
+			}
+            return product;
+		}
+
+        public float Magnitude()
+		{
+            double value = 0f;
+            for (int i = 0; i < values.Length; i++)
+			{
+                value += Math.Pow(values[i], 2.0f);
+			}
+            return (float)Math.Sqrt(value);
+		}
+
+        public Vector Normalize()
+		{
+            var mag = Magnitude();
+            for (int i = 0; i < values.Length; i++)
+			{
+                values[i] /= mag;
+			}
+            return this;
+		}
+
+
+        /// <summary>
+        /// Some kind of conversion of Vector into string
+        /// </summary>
+        /// <returns></returns>
+        public override string ToString()
+        {
+            return string.Join(",", values);
+        }
+    }
+    class Vector3f : Vector
+    {
         public float x
         {
             get => values[0];
@@ -54,32 +130,22 @@ namespace Computation.geograpy
             set => values[2] = value;
         }
 
-
-		public float this[int key]
-		{
-            get => values[key];
-            set => values[key] = value;
-		}
-
-
-		public static bool operator ==(Vector3f a, Vector3f b)
-		{
-            if (a.values.Length != b.values.Length) return false;            
-            for (int i=0; i < a.values.Length; i++)
-			{
-                if (!a.values[i].IsEqual(b.values[i]))
-				{
-                    return false;
-				}
-			}
-            return true;
-		}
-
-        public static bool operator !=(Vector3f a, Vector3f b)
+        public Vector3f(float x, float y, float z)
         {
-            return !(a == b);
+            this.values = new float[3];
+            this.values[0] = x;
+            this.values[1] = y;
+            this.values[2] = z;
         }
 
+        public static Vector3f CrossProduct3D(Vector3f v1, Vector3f v2)
+        {
+            float x_, y_, z_;
+            x_ = (v1.y * v2.z) - (v1.z * v2.y);
+            y_ = (v1.z * v2.x) - (v1.x * v2.z);
+            z_ = (v1.x * v2.y) - (v2.x * v1.y);
+            return new Vector3f(x_, y_, z_);
+        }
         public static Vector3f operator +(Vector3f a, Vector3f b)
         {
             var c = new Vector3f(0, 0, 0);
@@ -96,54 +162,6 @@ namespace Computation.geograpy
             c.y = a.y - b.y;
             c.z = a.z - b.z;
             return c;
-		}
-
-		public static bool operator <(Vector3f a, Vector3f b)
-		{
-			for (int i = 0; i < a.values.Length; i++)
-			{
-				if (a.values[i] < b.values[i]) return true;
-				else if (a.values[i] > b.values[i]) return false;
-			}
-			return false;
-		}
-
-		public static bool operator > (Vector3f a, Vector3f b)
-		{
-            if (a == b) return false;
-            return !(a < b);
-		}
-
-        public static float dotProduct(Vector3f v1, Vector3f v2)
-		{
-            if (v1.values.Length != v2.values.Length)
-			{
-                return Constants.FLT_MIN;
-			}
-            float product = 0f;
-            for (int i = 0; i < v1.values.Length; i++)
-			{
-                product += v1[i] * v2[i];
-			}
-            return product;
-		}
-
-        public static Vector3f crossProduct3D(Vector3f v1, Vector3f v2)
-        {
-            float x_, y_, z_;
-            x_ = (v1.y * v2.z) - (v1.z * v2.y);
-            y_ = (v1.z * v2.x) - (v1.x * v2.z);
-            z_ = (v1.x * v2.y) - (v2.x * v1.y);
-            return new Vector3f(x_, y_, z_);
-        }
-
-        /// <summary>
-        /// Some kind of conversion of Vector into string
-        /// </summary>
-        /// <returns></returns>
-        public override string ToString()
-        {
-            return string.Join(",", values);
         }
     }
 
