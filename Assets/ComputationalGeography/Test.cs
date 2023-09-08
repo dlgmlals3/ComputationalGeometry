@@ -4,20 +4,19 @@ using UnityEngine;
 using Computation.geograpy;
 public class Test : MonoBehaviour
 {
-    // Start is called before the first frame update
-    void Start()
+    [SerializeField] public Transform A;
+    [SerializeField] public Transform B;
+    [SerializeField] public Transform C;
+
+    void Update()
     {
-        //Vector<float> k = new Vector<float>(3);
-        var k = new Vector3f(1, 2, 3);
-        var u = new Vector3f(3, 2, 1);
+        GeoUtil geo = new GeoUtil();
+        Vector3f a = new Vector3f(A.position.x, A.position.y, A.position.z);
+        Vector3f b = new Vector3f(B.position.x, B.position.y, B.position.z);
+        Vector3f c = new Vector3f(C.position.x, C.position.y, C.position.z);
 
-        
+        Debug.Log(geo.Oridentation3d(a, b, c));
 
-        Debug.Log("k + u" + (k + u));
-        Debug.Log("k - u" + (k - u));
-        Debug.Log("k < u" + (k < u));
-        Debug.Log("k < u" + (k == u));
-        Debug.Log("k = " + k.Normalize());
     }
 
    

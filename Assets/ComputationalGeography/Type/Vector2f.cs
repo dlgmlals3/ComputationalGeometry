@@ -8,7 +8,6 @@ using UnityEngine;
 
 namespace Computation.geograpy
 {
-
     /// <summary>
     /// Generic class for arithmetic operator overloading demonstration
     /// </summary>
@@ -56,7 +55,7 @@ namespace Computation.geograpy
             return c;
 		}
 
-        public static float crossProduct2D(Vector2f v1, Vector2f v2)
+        public static float CrossProduct2D(Vector2f v1, Vector2f v2)
 		{
             return (v1.x * v2.y) - (v1.y * v2.x);
 		}

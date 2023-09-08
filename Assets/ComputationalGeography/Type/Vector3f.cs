@@ -8,15 +8,7 @@ using UnityEngine;
 
 namespace Computation.geograpy
 {
-    public static class Extension
-	{
-        private static readonly float TOLERANCE = 0.000001f;
-        public static bool IsEqual(this float x, float y)
-		{
-            Debug.Log("IsEqual");
-            return Math.Abs(x - y) < TOLERANCE;
-        }		
-	}
+
     static class Constants
 	{
         public const float FLT_MIN = -1;
@@ -146,6 +138,7 @@ namespace Computation.geograpy
             z_ = (v1.x * v2.y) - (v2.x * v1.y);
             return new Vector3f(x_, y_, z_);
         }
+
         public static Vector3f operator +(Vector3f a, Vector3f b)
         {
             var c = new Vector3f(0, 0, 0);
