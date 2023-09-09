@@ -104,7 +104,7 @@ namespace Computation.geograpy
             return string.Join(",", values);
         }
     }
-    class Vector3f : Vector
+    public class Vector3f : Vector
     {
         public float x
         {

@@ -33,6 +33,7 @@ namespace Computation.geograpy
 			var ab = b - a;
 			var ac = c - a;
 			var crossProduct = Vector3f.CrossProduct3D(ab, ac);
+			
 			var root = crossProduct.Magnitude();
 			return root / 2;
 		}
@@ -68,10 +69,11 @@ namespace Computation.geograpy
 
 			Vector3f ab = b - a;
 			Vector3f ac = c - a;
+			Debug.Log("Area : " + area + "point c : " + c);
 
 			if (area > 0f) { return RelativePosition.Left; }
 			if (area < 0f) { return RelativePosition.Right; }
-			if (ab.x * ac.x < 0f || ab.y * ac.y < 0f) { return RelativePosition.Behind; }
+			if (ab.x * ac.x < 0f || ab.z * ac.z < 0f) { return RelativePosition.Behind; }
 			if (ab.Magnitude() < ac.Magnitude()) { return RelativePosition.Beyond; }
 			if (a == c) { return RelativePosition.origin; }
 			if (b == c) { return RelativePosition.destination; }
