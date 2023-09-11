@@ -13,9 +13,15 @@ namespace Computation.geograpy
         {
             return Math.Abs(x - y) < TOLERANCE;
         }
+
         public enum RelativePosition
         {
             Left, Right, Behind, Beyond, Beetween, origin, destination
         }
+
+        public static bool _xor(bool x, bool y)
+		{
+            return x ^ y;
+		}
     }
 }

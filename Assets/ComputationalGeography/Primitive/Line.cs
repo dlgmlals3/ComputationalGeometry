@@ -1,21 +1,21 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using Microsoft.CSharp;
 
 namespace Computation.geograpy
 {
-    public class Line<T>
+    public class Line
     {
-        public Line(T p1, T p2)
+        public Line(Vector3f p1, Vector3f p2)
 		{
-            dir = (dynamic)p2 - p1;
+            dir = p2 - p1;
             point = p1;
 		}
 
-        T GetPoint() { return point; }
-        T GetDirection() { return dir; }
-        private T point;
-        private T dir;
+        Vector3f GetPoint() { return point; }
+        Vector3f GetDirection() { return dir; }
+        private Vector3f point;
+        private Vector3f dir;
     }
-
 }

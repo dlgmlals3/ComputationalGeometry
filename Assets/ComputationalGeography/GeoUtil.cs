@@ -16,6 +16,26 @@ namespace Computation.geograpy
 	{
 		public double TOLERANCE { get; private set; }
 
+		public bool Intersection(Point2d a, Point2d b, Point2d c, Point2d d)
+		{
+			var ab_c = Orientation2d(a, b, c);
+			var ab_d = Orientation2d(a, b, d);
+			var cd_a = Orientation2d(c, d, a);
+			var cd_b = Orientation2d(c, d, b);
+
+			if (
+				ab_c == RelativePosition.Beetween || ab_c == RelativePosition.origin || ab_c == RelativePosition.destination ||
+				ab_d == RelativePosition.Beetween || ab_d == RelativePosition.origin || ab_d == RelativePosition.destination ||
+				cd_a == RelativePosition.Beetween || cd_a == RelativePosition.origin || cd_a == RelativePosition.destination ||
+				cd_b == RelativePosition.Beetween || cd_b == RelativePosition.origin || cd_b == RelativePosition.destination
+			) return true;
+
+			var a1 = _xor(ab_c == RelativePosition.Left, ab_d == RelativePosition.Left);
+			var a2 = _xor(cd_a == RelativePosition.Left, cd_b == RelativePosition.Left);
+			return a1 && a2;
+		}
+
+
 		/// <summary>
 		/// AB 벡터와 AC 벡터를 잇는 삼각형의 넓이...
 		/// </summary>
@@ -38,7 +58,7 @@ namespace Computation.geograpy
 			return root / 2;
 		}
 
-		public RelativePosition Oridentation2d(Point2d a, Point2d b, Point2d c)
+		public RelativePosition Orientation2d(Point2d a, Point2d b, Point2d c)
 		{
 			var area = AreaTriangle2D(a, b, c);
 
@@ -60,7 +80,7 @@ namespace Computation.geograpy
 		/// <summary>
 		/// 제대로 동작안하는  듯?
 		/// </summary>
-		public RelativePosition Oridentation3d(Point3d a, Point3d b, Point3d c)
+		public RelativePosition Orientation3d(Point3d a, Point3d b, Point3d c)
 		{
 			var area = AreaTriangle3D(a, b, c);
 
@@ -85,19 +105,19 @@ namespace Computation.geograpy
 		/// </summary>
 		public bool IsLeft(Point3d a, Point3d b, Point3d c)
 		{
-			return Oridentation3d(a, b, c) == RelativePosition.Left;
+			return Orientation3d(a, b, c) == RelativePosition.Left;
 		}
 		public bool IsRight(Point3d a, Point3d b, Point3d c)
 		{
-			return Oridentation3d(a, b, c) == RelativePosition.Right;
+			return Orientation3d(a, b, c) == RelativePosition.Right;
 		}
 		public bool Beyond(Point3d a, Point3d b, Point3d c)
 		{
-			return Oridentation3d(a, b, c) == RelativePosition.Beyond;
+			return Orientation3d(a, b, c) == RelativePosition.Beyond;
 		}
 		public bool Behind(Point3d a, Point3d b, Point3d c)
 		{
-			return Oridentation3d(a, b, c) == RelativePosition.Behind;
+			return Orientation3d(a, b, c) == RelativePosition.Behind;
 		}
 	}
 }

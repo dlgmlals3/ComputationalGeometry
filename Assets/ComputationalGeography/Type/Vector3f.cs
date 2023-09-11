@@ -8,6 +8,8 @@ using UnityEngine;
 
 namespace Computation.geograpy
 {
+    using Point3d = Vector3f;
+    using Point2d = Vector2f;
 
     static class Constants
 	{
@@ -106,6 +108,8 @@ namespace Computation.geograpy
     }
     public class Vector3f : Vector
     {
+        public static Vector3f zero = new Vector3f(0, 0, 0);
+
         public float x
         {
             get => values[0];
