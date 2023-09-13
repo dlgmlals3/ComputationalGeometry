@@ -8,13 +8,9 @@ using UnityEngine;
 
 namespace Computation.geograpy
 {
-    /// <summary>
-    /// Generic class for arithmetic operator overloading demonstration
-    /// </summary>
-    /// <typeparam name="T"></typeparam>
-    class Vector2f : Vector
+    public class Vector2f : Vector
     {
-
+        public static Vector2f zero = new Vector2f(0f, 0f);
         public Vector2f(float x, float y)
         {
             this.values = new float[2];

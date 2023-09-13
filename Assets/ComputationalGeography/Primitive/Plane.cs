@@ -22,6 +22,7 @@ namespace Computation.geograpy
 		public Plane(Vector3f normal, float constant)
 		{
 			this.normal = normal;
+			this.normal.Normalize();
 			this.d = constant;
 		}
 
@@ -30,8 +31,11 @@ namespace Computation.geograpy
 			var v12 = p2 - p1;
 			var v13 = p3 - p1;
 			this.normal = Vector3f.CrossProduct3D(v12, v13);
+			this.normal.Normalize();
 			this.d = Vector3f.DotProduct(this.normal, p3);
 		}
+		public Vector3f GetNormal() => normal;
+
 
 	}
 }

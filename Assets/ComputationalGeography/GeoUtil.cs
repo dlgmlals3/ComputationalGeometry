@@ -15,7 +15,76 @@ namespace Computation.geograpy
 	class GeoUtil
 	{
 		public double TOLERANCE { get; private set; }
+		public static float DegreeToRadian(float angle) { return angle * ((float)Math.PI / 180.0f); }
+		public static float RadianToDegree(float angle) { return angle * (180.0f / (float)Math.PI); }
 
+		public float AnglePlanes(Plane p1, Plane p2)
+		{
+			var dot = Vector3f.DotProduct(p1.GetNormal(), p2.GetNormal());
+			float theta = (float)Math.Acos(Math.Abs(dot));
+			return RadianToDegree(theta);
+		}
+
+		public float AngleLinePlane(Line3d l1, Plane p1)
+		{
+			var dot = Vector3f.DotProduct(l1.GetDirection(), p1.GetNormal());
+			float theta = (float)Math.Acos(Math.Abs(dot));
+			float angle = RadianToDegree(theta);
+			return 90 - angle;
+		}
+
+		public float AngleLine3D(Line3d l1, Line3d l2)
+		{
+			var dot = Vector3f.DotProduct(l1.GetDirection(), l2.GetDirection());
+			float theta = (float)Math.Acos(Math.Abs(dot));
+			return RadianToDegree(theta);
+		}
+
+		public float AngleLine2D(Line2d l1, Line2d l2)
+		{
+			var dot = Vector3f.DotProduct(l1.GetDirection(), l2.GetDirection());
+			float theta = (float)Math.Acos(Math.Abs(dot));
+			return RadianToDegree(theta);
+		}
+
+		public bool Intersection(Line2d lineA, Line2d lineB, out Point2d result)
+		{
+			var a = lineA.GetStartPoint();
+			var b = lineA.GetEndPoint();
+			var c = lineB.GetStartPoint();
+			var d = lineB.GetEndPoint();
+			return Intersection(a, b, c, d, out result);
+		}
+
+		/// <summary>
+		/// Verify : IntersectionTest() 
+		/// 라인AB, 라인CD의 교차점을 구한다.
+		/// dlgmlals3 그럼 3차원 점은 ????????
+		/// </summary>
+		public bool Intersection(Point2d a, Point2d b, Point2d c, Point2d d, out Point2d result)
+		{
+			result = Point2d.zero;
+			Vector2f AB = b - a;
+			Vector2f CD = d - c;
+			Vector2f AC = c - a;
+			Vector2f normal = new Vector2f(CD.y, -CD.x);
+			float abDotNormal = Vector2f.DotProduct(normal, AB);
+
+			if (abDotNormal != 0)
+			{
+				float acDotNormal = Vector2f.DotProduct(normal, AC);
+				var t = acDotNormal / abDotNormal;
+				result.x = (AB.x * t) + a.x;
+				result.y = (AB.y * t) + a.y;
+				return true;
+			}
+			return false;
+		}
+
+		/// <summary>
+		/// 아직 검증 안됌
+		/// </summary>
+		/// <returns></returns>
 		public bool Intersection(Point2d a, Point2d b, Point2d c, Point2d d)
 		{
 			var ab_c = Orientation2d(a, b, c);
@@ -78,7 +147,7 @@ namespace Computation.geograpy
 		}
 
 		/// <summary>
-		/// 제대로 동작안하는  듯?
+		/// 검증 안됌..
 		/// </summary>
 		public RelativePosition Orientation3d(Point3d a, Point3d b, Point3d c)
 		{
