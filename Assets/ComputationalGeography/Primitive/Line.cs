@@ -13,6 +13,7 @@ namespace Computation.geograpy
         public Line3d(Vector3f p1, Vector3f p2)
         {
             dir = p2 - p1;
+            dir.Normalize();
             point = p1;
         }
 
