@@ -23,5 +23,7 @@ namespace Computation.geograpy
 		{
             return x ^ y;
 		}
+
+        
     }
 }

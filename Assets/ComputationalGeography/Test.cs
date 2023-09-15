@@ -33,7 +33,7 @@ public class Test : MonoBehaviour
     void Update()
     {
         UpdateCoordinates();
-        //AngleBetweenLine2d();
+        AngleBetweenLine3d();
         
     }
 

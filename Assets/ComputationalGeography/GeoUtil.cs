@@ -18,6 +18,45 @@ namespace Computation.geograpy
 		public static float DegreeToRadian(float angle) { return angle * ((float)Math.PI / 180.0f); }
 		public static float RadianToDegree(float angle) { return angle * (180.0f / (float)Math.PI); }
 
+
+		public bool Coplaner(Point3d a, Point3d b, Point3d c, Point3d d)
+		{
+			var p1 = b - a;
+			var p2 = c - a;
+			var p3 = d - a;
+			return CoPlaner(p1, p2, p3);
+		}
+
+		public bool CoPlaner(Vector3f p1, Vector3f p2, Vector3f p3)
+		{
+			var value = scalerTripleProduct(p1, p2, p3);
+			return value == 0;
+		}
+
+		/// <summary>
+		/// Point 3개가 동일한 라인 위에 있는지 확인한다.
+		/// </summary>
+		public bool Collinear(Point3d p1, Point3d p2, Point3d p3)
+		{
+			var v1 = p2 - p1;
+			var v2 = p3 - p1;
+			return Collinear(v1, v2);
+		}
+
+		/// <summary>
+		/// 벡터 A, B가 동일한 라인 위에 있는지 확인한다.
+		/// </summary>
+		public bool Collinear(Vector3f a, Vector3f b)
+		{
+			var v1 = a.x * b.y - a.y * b.x;
+			var v2 = a.y * b.z - a.z * b.y;
+			var v3 = a.x * b.z - a.z * b.x;
+			return v1 == 0 && v2 == 0 && v3 == 0;
+		}
+
+		/// <summary>
+		/// 평면과 평면 사이의 각도를 구한다.
+		/// </summary>
 		public float AnglePlanes(Plane p1, Plane p2)
 		{
 			var dot = Vector3f.DotProduct(p1.GetNormal(), p2.GetNormal());
@@ -25,6 +64,9 @@ namespace Computation.geograpy
 			return RadianToDegree(theta);
 		}
 
+		/// <summary>
+		/// 라인과 평면사이의 각도를 구한다.
+		/// </summary>
 		public float AngleLinePlane(Line3d l1, Plane p1)
 		{
 			var dot = Vector3f.DotProduct(l1.GetDirection(), p1.GetNormal());
@@ -33,13 +75,19 @@ namespace Computation.geograpy
 			return 90 - angle;
 		}
 
+		/// <summary>
+		/// 라인과 라인사이의 각도를 구한다.
+		/// </summary>
 		public float AngleLine3D(Line3d l1, Line3d l2)
 		{
 			var dot = Vector3f.DotProduct(l1.GetDirection(), l2.GetDirection());
-			float theta = (float)Math.Acos(Math.Abs(dot));
+			float theta = (float)Math.Acos(dot);
 			return RadianToDegree(theta);
 		}
 
+		/// <summary>
+		/// 2차원 라인과 라인 사이의 각도를 구한다.
+		/// </summary>
 		public float AngleLine2D(Line2d l1, Line2d l2)
 		{
 			var dot = Vector3f.DotProduct(l1.GetDirection(), l2.GetDirection());
@@ -47,6 +95,9 @@ namespace Computation.geograpy
 			return RadianToDegree(theta);
 		}
 
+		/// <summary>
+		/// 2차원 라인과 2차원 라인의 교차점을 구한다.
+		/// </summary>
 		public bool Intersection(Line2d lineA, Line2d lineB, out Point2d result)
 		{
 			var a = lineA.GetStartPoint();
@@ -187,6 +238,13 @@ namespace Computation.geograpy
 		public bool Behind(Point3d a, Point3d b, Point3d c)
 		{
 			return Orientation3d(a, b, c) == RelativePosition.Behind;
+		}
+
+
+		private float scalerTripleProduct(Vector3f v1, Vector3f v2, Vector3f v3)
+		{
+			var cross = Vector3f.CrossProduct3D(v2, v3);
+			return Vector3f.DotProduct(v1, cross);
 		}
 	}
 }
