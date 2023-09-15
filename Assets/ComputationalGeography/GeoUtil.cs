@@ -18,7 +18,21 @@ namespace Computation.geograpy
 		public static float DegreeToRadian(float angle) { return angle * ((float)Math.PI / 180.0f); }
 		public static float RadianToDegree(float angle) { return angle * (180.0f / (float)Math.PI); }
 
+		/// <summary>
+		/// 점에서 직선으로 수직인 지점에서 점과 선의 최소 거리를 구한다.
+		/// </summary>
+		public float Distance(Line3d l1, Point3d Y, out float t, out Point3d point)
+		{
+			Vector3f AY = Y - l1.GetPoint();
+			t = Vector3f.DotProduct(l1.GetDirection(), AY);
+			point = l1.GetPoint() + l1.GetDirection() * t;
 
+			return (point - Y).Magnitude();
+		}
+
+		/// <summary>
+		/// 4개의 점이 한 평면에 있는지 확인한다.
+		/// </summary>
 		public bool Coplaner(Point3d a, Point3d b, Point3d c, Point3d d)
 		{
 			var p1 = b - a;
@@ -27,6 +41,9 @@ namespace Computation.geograpy
 			return CoPlaner(p1, p2, p3);
 		}
 
+		/// <summary>
+		/// 3개의 벡터가 한평면에 있는지 확인한다.
+		/// </summary>
 		public bool CoPlaner(Vector3f p1, Vector3f p2, Vector3f p3)
 		{
 			var value = scalerTripleProduct(p1, p2, p3);
@@ -110,7 +127,6 @@ namespace Computation.geograpy
 		/// <summary>
 		/// Verify : IntersectionTest() 
 		/// 라인AB, 라인CD의 교차점을 구한다.
-		/// dlgmlals3 그럼 3차원 점은 ????????
 		/// </summary>
 		public bool Intersection(Point2d a, Point2d b, Point2d c, Point2d d, out Point2d result)
 		{
@@ -133,10 +149,10 @@ namespace Computation.geograpy
 		}
 
 		/// <summary>
-		/// 아직 검증 안됌
+		/// 라인 세그먼트 단위로 교차점 검사 2d
 		/// </summary>
 		/// <returns></returns>
-		public bool Intersection(Point2d a, Point2d b, Point2d c, Point2d d)
+		public bool Intersection2D(Point2d a, Point2d b, Point2d c, Point2d d)
 		{
 			var ab_c = Orientation2d(a, b, c);
 			var ab_d = Orientation2d(a, b, d);
@@ -164,10 +180,12 @@ namespace Computation.geograpy
 			var ab = b - a;
 			var ac = c - a;
 			var result = Vector2f.CrossProduct2D(ab, ac);
-
 			return result / 2;
 		}
 
+		/// <summary>
+		/// AB 벡터와 AC 벡터를 잇는 삼각형의 넓이...
+		/// </summary>
 		public double AreaTriangle3D(Point3d a, Point3d b, Point3d c)
 		{
 			var ab = b - a;
@@ -178,12 +196,24 @@ namespace Computation.geograpy
 			return root / 2;
 		}
 
+		private double OrientationXY3D(Point3d a, Point3d b, Point3d c)
+		{
+			var ab = b - a;
+			var ac = c - a;
+			var crossProduct = Vector3f.CrossProduct3D(ab, ac);
+			var up = new Vector3f(0, -1, 0);
+			return Vector3f.DotProduct(up, crossProduct);
+		}
+
+		/// <summary>
+		/// AB 벡터가 있을때 점C의 상대적 위치를 알수있다.
+		/// </summary>
 		public RelativePosition Orientation2d(Point2d a, Point2d b, Point2d c)
 		{
 			var area = AreaTriangle2D(a, b, c);
 
 			if (area > 0 && area < TOLERANCE) area = 0;
-			if (area < 0 && area < TOLERANCE) area = 0;
+			if (area < 0 && area > TOLERANCE) area = 0;
 
 			Vector2f ab = b - a;
 			Vector2f ac = c - a;
@@ -198,18 +228,17 @@ namespace Computation.geograpy
 		}
 
 		/// <summary>
-		/// 검증 안됌..
+		/// AB 벡터가 있을때 점C의 상대적 위치를 알수있다.
 		/// </summary>
 		public RelativePosition Orientation3d(Point3d a, Point3d b, Point3d c)
 		{
-			var area = AreaTriangle3D(a, b, c);
+			var area = OrientationXY3D(a, b, c);
 
 			if (area > 0 && area < TOLERANCE) area = 0;
-			if (area < 0 && area < TOLERANCE) area = 0;
+			if (area < 0 && area > TOLERANCE) area = 0;
 
 			Vector3f ab = b - a;
 			Vector3f ac = c - a;
-			Debug.Log("Area : " + area + "point c : " + c);
 
 			if (area > 0f) { return RelativePosition.Left; }
 			if (area < 0f) { return RelativePosition.Right; }
@@ -220,6 +249,7 @@ namespace Computation.geograpy
 			return  RelativePosition.Beetween;
 		}
 
+		
 		/// <summary>
 		/// A, B를 직선으로 봤을때 C의 상대적 위치
 		/// </summary>
@@ -239,7 +269,6 @@ namespace Computation.geograpy
 		{
 			return Orientation3d(a, b, c) == RelativePosition.Behind;
 		}
-
 
 		private float scalerTripleProduct(Vector3f v1, Vector3f v2, Vector3f v3)
 		{

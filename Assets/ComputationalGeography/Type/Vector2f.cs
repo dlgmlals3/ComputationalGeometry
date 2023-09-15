@@ -53,7 +53,7 @@ namespace Computation.geograpy
 
         public static float CrossProduct2D(Vector2f v1, Vector2f v2)
 		{
-            return (v1.x * v2.y) - (v1.y * v2.x);
+            return (v1.x * v2.y) - (v2.x * v1.y);
 		}
 
         /// <summary>

@@ -139,7 +139,7 @@ namespace Computation.geograpy
             float x_, y_, z_;
             x_ = (v1.y * v2.z) - (v1.z * v2.y);
             y_ = (v1.z * v2.x) - (v1.x * v2.z);
-            z_ = (v1.x * v2.y) - (v2.x * v1.y);
+            z_ = (v1.x * v2.y) - (v1.y * v2.x);
             return new Vector3f(x_, y_, z_);
         }
 
@@ -158,6 +158,15 @@ namespace Computation.geograpy
             c.x = a.x - b.x;
             c.y = a.y - b.y;
             c.z = a.z - b.z;
+            return c;
+        }
+
+        public static Vector3f operator *(Vector3f a, float b)
+        {
+            var c = new Vector3f(0, 0, 0);
+            c.x = a.x * b;
+            c.y = a.y * b;
+            c.z = a.z * b;
             return c;
         }
     }
