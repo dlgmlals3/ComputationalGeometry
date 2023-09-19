@@ -18,6 +18,12 @@ namespace Computation.geograpy
 		public static float DegreeToRadian(float angle) { return angle * ((float)Math.PI / 180.0f); }
 		public static float RadianToDegree(float angle) { return angle * (180.0f / (float)Math.PI); }
 
+
+		public float Distance(Plane p, Point3d q)
+		{
+			return Vector3f.DotProduct(p.GetNormal(), q) - p.GetD();
+
+		}
 		/// <summary>
 		/// 점에서 직선으로 수직인 지점에서 점과 선의 최소 거리를 구한다.
 		/// </summary>
@@ -98,8 +104,21 @@ namespace Computation.geograpy
 		public float AngleLine3D(Line3d l1, Line3d l2)
 		{
 			var dot = Vector3f.DotProduct(l1.GetDirection(), l2.GetDirection());
-			float theta = (float)Math.Acos(dot);
+			float theta = (float)Math.Acos(Math.Abs(dot));
 			return RadianToDegree(theta);
+		}
+
+		public float AngleLine3DFrom360(Line3d l1, Line3d l2)
+		{
+			var dot = Vector3f.DotProduct(l1.GetDirection(), l2.GetDirection());
+			var cross = Vector3f.CrossProduct3D(l1.GetDirection(), l2.GetDirection());
+			float theta = (float)Math.Acos(dot);
+			var angle = RadianToDegree(theta);
+			if (Vector3f.DotProduct(new Vector3f(0f, 1f, 0f), cross) >= 0)
+			{
+				return angle;
+			}
+			return 360 - angle;
 		}
 
 		/// <summary>

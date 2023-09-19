@@ -36,6 +36,6 @@ namespace Computation.geograpy
 		}
 		public Vector3f GetNormal() => normal;
 
-
+		public float GetD() => d;
 	}
 }

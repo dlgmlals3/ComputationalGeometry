@@ -42,8 +42,10 @@ public class Test : MonoBehaviour
     void Update()
     {
         UpdateCoordinates();
-        IntersectionTest1();
+        AngleBetweenLine();
     }
+
+
 
     /// <summary>
     /// 점에서 직선으로 수직인 지점을 찾고, 그 지점과 거리를 구한다.
@@ -56,7 +58,7 @@ public class Test : MonoBehaviour
         //vector3fc, point
         lineRendererPlane.SetPosition(0, new Vector3(vector3fc.x, vector3fc.y, vector3fc.z));
         lineRendererPlane.SetPosition(1, new Vector3(point.x, point.y, point.z));
-
+        
         Debug.Log("DistanceTest : t " + t + " distance : " + distance);
     }
 
@@ -90,14 +92,15 @@ public class Test : MonoBehaviour
     /// </summary>
     void AngleBetweenLine()
 	{
-        GeoUtil geo = new GeoUtil();
+        /*
         var l1 = new Line2d(vector2fa, vector2fb);
         var l2 = new Line2d(vector2fc, vector2fd);
-        Debug.Log("2d angle : " + geo.AngleLine2D(l1, l2));
+        Debug.Log("2d angle : " + geo.AngleLine2D(l1, l2));*/
 
         var l13d = new Line3d(vector3fa, vector3fb);
         var l23d = new Line3d(vector3fc, vector3fd);
-        Debug.Log("3d angle : " + geo.AngleLine3D(l13d, l23d));
+        // 왜 삼중곱이 양수인데, 360 - 파이가 나오지;;;
+        Debug.Log("3d angle : " + geo.AngleLine3DFrom360(l13d, l23d));
     }
 
     /// <summary>
@@ -145,8 +148,6 @@ public class Test : MonoBehaviour
 
         vector3fa = new Vector3f(A.position.x, A.position.y, A.position.z);
         vector3fb = new Vector3f(B.position.x, B.position.y, B.position.z);
-        vector3fc = new Vector3f(C.position.x, C.position.y, C.position.z);
-        vector3fd = new Vector3f(D.position.x, D.position.y, D.position.z);
         vector3fc = new Vector3f(C.position.x, C.position.y, C.position.z);
         vector3fd = new Vector3f(D.position.x, D.position.y, D.position.z);
         vector3fe = new Vector3f(E.position.x, E.position.y, E.position.z);
