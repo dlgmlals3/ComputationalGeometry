@@ -16,8 +16,8 @@ public class Test : MonoBehaviour
 	[SerializeField] public Transform D;
     [SerializeField] public Transform E;
     [SerializeField] public Transform F;
-    [SerializeField] public GameObject plane;
-    [SerializeField] public GameObject target;
+    [SerializeField] public GameObject Plane_;
+    [SerializeField] public GameObject Target;
     private Vector2f vector2fa;
     private Vector2f vector2fb;
     private Vector2f vector2fc;
@@ -42,9 +42,22 @@ public class Test : MonoBehaviour
     void Update()
     {
         UpdateCoordinates();
-        AngleBetweenLine();
+        Intersection3dTest();
     }
 
+    void Intersection3dTest()
+	{
+        var plane = new Plane3(new Vector3f(0, 1, 0), new Vector3f(0, 0, 0));
+
+        var line = new Line3d(vector3fa, vector3fb);
+		var ret = geo.Intersection(line, plane, out Vector3f point);
+        if (point is not null)
+		{
+            C.transform.position = new Vector3(point.x, point.y, point.z);
+            Debug.Log("Intersection3d point : " + point + " D: " + plane.GetD());
+        }
+        
+    }
 
 
     /// <summary>
@@ -52,10 +65,11 @@ public class Test : MonoBehaviour
     /// </summary>
     void DistanceTest()
 	{
-        GeoUtil geo = new GeoUtil();
-        var line3d = new Line3d(vector3fa, vector3fb);
-        float distance = geo.Distance(line3d, vector3fc, out float t, out Vector3f point);
-        //vector3fc, point
+        
+        var line = new Line3d(vector3fa, vector3fb);
+        float distance = geo.Distance(line, vector3fc, out float t, out Vector3f point);
+        
+
         lineRendererPlane.SetPosition(0, new Vector3(vector3fc.x, vector3fc.y, vector3fc.z));
         lineRendererPlane.SetPosition(1, new Vector3(point.x, point.y, point.z));
         
@@ -103,11 +117,13 @@ public class Test : MonoBehaviour
         Debug.Log("3d angle : " + geo.AngleLine3DFrom360(l13d, l23d));
     }
 
+
     /// <summary>
-    /// 두 라인의 교차점을 구한다.
+    /// 두 라인의 교차점 체크하고 교차점을 구한다.
     /// </summary>
-    void IntersectionTest1()
+    void IntersectionTest()
     {
+        // 2차원 직선의 교차점 체크.
         if (geo.Intersection2D(vector2fa, vector2fb, vector2fc, vector2fd))
         {
             Debug.Log("Intersection is generated.");
@@ -116,13 +132,11 @@ public class Test : MonoBehaviour
         {
             Debug.Log("ntersection is NOT !! generated");
         }
-    }
 
-    void IntersectionTest2()
-    {
+        // 2차원 직선의 교차점 구하기.
         if (geo.Intersection(vector2fa, vector2fb, vector2fc, vector2fd, out Vector2f e))
         {
-            target.transform.position = new Vector3(e.x, 0, e.y);            
+            Target.transform.position = new Vector3(e.x, 0, e.y);            
             Debug.Log("intersection point : " + e);
         }
         else
@@ -160,7 +174,7 @@ public class Test : MonoBehaviour
         lineRendererC.SetPosition(0, E.position);
         lineRendererC.SetPosition(1, F.position);
 
-        lineRendererPlane.SetPosition(0, plane.transform.position);
-        lineRendererPlane.SetPosition(1, plane.transform.up * 100);
+        lineRendererPlane.SetPosition(0, Plane_.transform.position);
+        lineRendererPlane.SetPosition(1, Plane_.transform.up * 100);
     }
 }

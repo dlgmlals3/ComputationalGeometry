@@ -19,11 +19,12 @@ namespace Computation.geograpy
 		public static float RadianToDegree(float angle) { return angle * (180.0f / (float)Math.PI); }
 
 
-		public float Distance(Plane p, Point3d q)
+		public float Distance(Plane3 p, Point3d q)
 		{
 			return Vector3f.DotProduct(p.GetNormal(), q) - p.GetD();
-
 		}
+
+
 		/// <summary>
 		/// 점에서 직선으로 수직인 지점에서 점과 선의 최소 거리를 구한다.
 		/// </summary>
@@ -80,7 +81,7 @@ namespace Computation.geograpy
 		/// <summary>
 		/// 평면과 평면 사이의 각도를 구한다.
 		/// </summary>
-		public float AnglePlanes(Plane p1, Plane p2)
+		public float AnglePlanes(Plane3 p1, Plane3 p2)
 		{
 			var dot = Vector3f.DotProduct(p1.GetNormal(), p2.GetNormal());
 			float theta = (float)Math.Acos(Math.Abs(dot));
@@ -90,7 +91,7 @@ namespace Computation.geograpy
 		/// <summary>
 		/// 라인과 평면사이의 각도를 구한다.
 		/// </summary>
-		public float AngleLinePlane(Line3d l1, Plane p1)
+		public float AngleLinePlane(Line3d l1, Plane3 p1)
 		{
 			var dot = Vector3f.DotProduct(l1.GetDirection(), p1.GetNormal());
 			float theta = (float)Math.Acos(Math.Abs(dot));
@@ -129,6 +130,27 @@ namespace Computation.geograpy
 			var dot = Vector3f.DotProduct(l1.GetDirection(), l2.GetDirection());
 			float theta = (float)Math.Acos(Math.Abs(dot));
 			return RadianToDegree(theta);
+		}
+
+		/// <summary>
+		/// 평면과 3차원 라인의 교차점을 구한다.
+		/// </summary>
+		public bool Intersection(Line3d line, Plane3 plane, out Point3d point)
+		{
+			var n = plane.GetNormal();
+			var D = plane.GetD();
+			var d = line.GetDirection();
+			var p = line.GetPoint();
+			
+			var nd = Vector3f.DotProduct(n, d);
+			if (!(nd == 0))
+			{
+				var t = (-1 * Vector3f.DotProduct(n, p) + D) / nd;
+				point = new Point3d(p.x + t * d.x, p.y + t * d.y, p.z + t * d.z);
+				return true;
+			}
+			point = null;
+			return false;
 		}
 
 		/// <summary>
