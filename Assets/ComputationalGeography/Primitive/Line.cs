@@ -10,11 +10,18 @@ namespace Computation.geograpy
 
     public class Line3d
     {
-        public Line3d(Vector3f p1, Vector3f p2)
+        
+        public Line3d(Point3d p1, Point3d p2)
         {
             dir = p2 - p1;
             dir.Normalize();
             point = p1;
+        }
+        public Line3d(Vector3f direction, Point3d p, int n)
+        {
+            dir = direction;
+            dir.Normalize();
+            point = p;
         }
 
         public Vector3f GetPoint() { return point; }
@@ -31,6 +38,12 @@ namespace Computation.geograpy
             dir.Normalize();
             startPoint = p1;
             endPoint = p2;
+        }
+        public Line2d(Vector2f direction, Point2d p, int n)
+        {
+            dir = direction;
+            dir.Normalize();
+            startPoint = p;
         }
 
         public Vector2f GetStartPoint() => startPoint;

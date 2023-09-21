@@ -132,6 +132,30 @@ namespace Computation.geograpy
 			return RadianToDegree(theta);
 		}
 
+		public bool Intersection(Plane3 planeA, Plane3 planeB, out Line3d line)
+		{
+			var n1 = planeA.GetNormal();
+			var n2 = planeB.GetNormal();
+			var d1 = planeA.GetD();
+			var d2 = planeB.GetD();
+
+			var direction = Vector3f.CrossProduct3D(n1, n2);
+
+			if (direction.Magnitude() == 0)
+			{
+				line = null;
+				return false;
+			}
+
+			var n1n2 = Vector3f.DotProduct(n1, n2);
+			var n1n2_2 = n1n2 * n1n2;
+			var a = (d2 * n1n2 - d1) / (n1n2_2 - 1);
+			var b = (d1 * n1n2 - d2) / (n1n2_2 - 1);
+			var point = n1 * a + n2 * b;
+			line = new Line3d(point, direction, 0);
+			return true;
+		}
+
 		/// <summary>
 		/// 평면과 3차원 라인의 교차점을 구한다.
 		/// </summary>
